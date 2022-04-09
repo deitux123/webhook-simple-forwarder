@@ -1,13 +1,38 @@
 const express   = require('express')
 const WebSocket = require('ws');
 const axios     = require('axios');
+var jwt         = require('jsonwebtoken')
 
 module.exports =
 {
-    server: function(port = 3000)
+    server: function(secret, port = 3000)
     {
+        if (!secret)
+        {
+            console.error("Incorrect Usage")
+            return
+        }
+
         const app = express()
-        const wss = new WebSocket.WebSocketServer({ noServer: true });
+        const wss = new WebSocket.WebSocketServer({
+            noServer: true,
+            verifyClient: function (info, cb) {
+                var token = info.req.headers.token
+                if (!token)
+                    cb(false, 401, 'Unauthorized')
+                else {
+                    jwt.verify(token, secret, function (err, decoded) {
+                        if (err) {
+                            cb(false, 401, 'Unauthorized')
+                        } else {
+                            info.req.user = decoded //[1]
+                            cb(true)
+                        }
+                    })
+        
+                }
+            }
+        });
 
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
@@ -65,10 +90,17 @@ module.exports =
 
 
 
-    client: async function(server)
+    client: async function(server, secret)
     {
+        if (!secret || !server)
+        {
+            console.error("Incorrect Usage")
+            return
+        }
+        
         const app = express()
-        const ws = new WebSocket('ws://localhost:3000/ws', { perMessageDeflate: false });
+        const token = jwt.sign({ name: 'auth' }, secret)
+        const ws = new WebSocket('ws://localhost:3000/ws', { perMessageDeflate: false, headers: { token: token } });
         
         ws.on('message', async function message(data) {
             let msg = JSON.parse(data)
