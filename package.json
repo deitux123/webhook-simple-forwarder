@@ -1,6 +1,6 @@
 {
   "name": "webhook-simple-forwarder",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple webhook forwarder script to send webhooks from a hosted url to your local machine without hassle of setting up tunnels, or port forwarding your own machine, uses webhooks to communicate between client and server",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,10 @@
     "express": "^4.17.3",
     "run-middleware": "^0.9.10",
     "ws": "^8.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deitux123/webhook-simple-forwarder"
   },
   "keywords": [
     "webhooks",

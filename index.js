@@ -9,6 +9,9 @@ module.exports =
         const app = express()
         const wss = new WebSocket.WebSocketServer({ noServer: true });
 
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
+
         app.get('*', (req, res) => 
         {
             wss.clients.forEach(function each(client)
@@ -68,14 +71,13 @@ module.exports =
         const ws = new WebSocket('ws://localhost:3000/ws', { perMessageDeflate: false });
         
         ws.on('message', async function message(data) {
-            console.log('client received: %s', data);
             let msg = JSON.parse(data)
 
             try
             {
                 let res = await axios.post('http://localhost:' + server.address().port + msg.path, msg.body)
-                console.log(res.status)
-                console.log(res.data)
+                // console.log(res.status)
+                // console.log(res.data)
             }
             catch(e)
             {
