@@ -37,7 +37,7 @@ module.exports =
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
 
-        app.get('*', (req, res) => 
+        app.post('*', (req, res) => 
         {
             wss.clients.forEach(function each(client)
             {
@@ -47,6 +47,7 @@ module.exports =
                       url: req.protocol + '://' + req.get('host') + req.originalUrl,
                       path: req.originalUrl,
                       body: req.body,
+                      headers: req.headers
                   }));
                 }
             });
@@ -54,6 +55,8 @@ module.exports =
             res.status(200)
             res.send("Ok")
         })
+
+        app.get('*', (req, res) => { res.status(200).send({ status: 200, message: "Success", content: "Ok" })})
 
         wss.on('connection', function connection(ws) 
         {
@@ -107,7 +110,7 @@ module.exports =
 
             try
             {
-                let res = await axios.post('http://localhost:' + server.address().port + msg.path, msg.body)
+                let res = await axios.post('http://localhost:' + server.address().port + msg.path, { ...msg.body, _url: msg.url, _headers: msg.headers })
                 // console.log(res.status)
                 // console.log(res.data)
             }

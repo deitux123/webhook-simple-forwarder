@@ -1,6 +1,6 @@
 {
   "name": "webhook-simple-forwarder",
-  "version": "1.0.9",
+  "version": "1.1.1",
   "description": "Simple webhook forwarder script to send webhooks from a hosted url to your local machine without hassle of setting up tunnels, or port forwarding your own machine, uses webhooks to communicate between client and server",
   "main": "index.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "express",
     "tunnel",
     "reverse",
-    "local"
+    "local",
+    "https webhooks"
   ]
 }

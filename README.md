@@ -40,6 +40,11 @@ const webhook_forwarder = require('webhook-simple-forwarder')
 webhook_forwarder.server('secret-key', /*optional port, default: 3000 */) // replace 'secret-key' to match client
 ```
 
+### Additional Data Returned
+`req.body._url` - provides original url webhook was sent to
+`req.body._headers` - provides original headers sent with the webhook
+`req.body` - original webhook body
+
 ### What endpoints can I use?
 Use the same endpoints that you have already. 
 
