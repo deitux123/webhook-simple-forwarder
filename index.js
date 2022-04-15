@@ -131,7 +131,7 @@ function client_init(server, url, secret, base_url, omit_base_url)
     const ws = new WebSocket('ws://' + url + '/ws', { perMessageDeflate: false, headers: { token: token } });
     console.log('(client) WebhookSimpleForwarder: Connecting to WebSocket server');
 
-    ws.on('message', function (data) { client_handle_data(data, ws, server, msg, base_url, omit_base_url) })
+    ws.on('message', function (data) { client_handle_data(data, ws, server, base_url, omit_base_url) })
 
 
     ws.on('open', function() {
@@ -163,7 +163,7 @@ function client_init(server, url, secret, base_url, omit_base_url)
 }
 
 
-function client_handle_data(raw_msg, ws, server, msg, base_url, omit_base_url)
+function client_handle_data(raw_msg, ws, server, base_url, omit_base_url)
 {
     let parsed_msg = JSON.parse(raw_msg)
 
@@ -175,7 +175,7 @@ function client_handle_data(raw_msg, ws, server, msg, base_url, omit_base_url)
 
         case 'on-webhook':
             console.log('webhook recieved from: parsed_msg')
-            client_forward_webhook(server, parsed_msg, msg, base_url, omit_base_url)
+            client_forward_webhook(server, parsed_msg, base_url, omit_base_url)
             break;
 
         default:
@@ -185,7 +185,7 @@ function client_handle_data(raw_msg, ws, server, msg, base_url, omit_base_url)
 }
 
 
-async function client_forward_webhook(server, parsed_msg, msg, base_url, omit_base_url)
+async function client_forward_webhook(server, parsed_msg, base_url, omit_base_url)
 {
     try
     { 
