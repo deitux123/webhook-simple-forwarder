@@ -196,7 +196,7 @@ async function client_forward_webhook(server, parsed_msg, base_url, omit_base_ur
             if (omit_base_url)
                 parsed_msg.path = parsed_msg.path.slice(base_url.length)
 
-            let res = await axios.post('http://localhost:' + server.address().port + msg.path,
+            let res = await axios.post('http://localhost:' + server.address().port + parsed_msg.path,
                 { ...parsed_msg.body, _url: parsed_msg.url, _path: parsed_msg.path, _headers: parsed_msg.headers })
         }
 
