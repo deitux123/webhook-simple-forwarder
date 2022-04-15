@@ -16,6 +16,11 @@ npm i --save-dev webhook-simple-forwarder
 ```js
 // index.js
 const webhook_forwarder = require('webhook-simple-forwarder')
+const express = require('express')
+const app = express()
+
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 
 app.post('/wh/some-webhook', function(req, res) {
     console.log("Received Webhook!!")
@@ -24,9 +29,15 @@ app.post('/wh/some-webhook', function(req, res) {
     res.status(200).send("ok")
 })
 
-const server = app.listen(port, () => { 
+const server = app.listen(process.env.PORT, () => { 
     if (process.env.NODE_ENV === 'Development')
-        webhook_forwarder.client(server, 'secret-key') // replace 'secret-key' with your own
+        webhook_forwarder.client(
+            server, 
+            'forward.exampledomain.com:3000', 
+            'secret-key', // replace 'secret-key' with your own
+            '/base_path', // optional, can be any base path, for example if you want to allow multiple different client to use the same server
+            true // true to omit base url from final request url.
+        )
 })
 ```
 
